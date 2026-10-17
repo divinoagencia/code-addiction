@@ -77,6 +77,17 @@ npx codeadd mcp --corpus=docs
 npx codeadd config show
 ```
 
+## Claude Code plugin
+
+For Claude Code where there is no terminal to run `npx codeadd install` (Claude Code on the web, cloud sessions, the desktop app), install ADD as a Claude Code plugin:
+
+```text
+/plugin marketplace add brabos-ai/code-addiction
+/plugin install codeadd@code-addiction
+```
+
+In cloud sessions, enable the plugin on your claude.ai account and every session loads it. The commands keep their names (`/add-new`, `/add-plan`, …, or `/codeadd:add-new` when another plugin claims the name). On the first session in a project without `.codeadd/`, the plugin installs the core with `npx codeadd install --providers none`. The plugin ships the default features; for another feature set, install the `claude` provider with the CLI instead. Details: [claude-plugin/README.md](claude-plugin/README.md).
+
 ## Plugins
 
 Plugins integrate external MCP tools into ADD commands — extending discovery, planning, and diagnosis with structural code navigation, and adding live browser driving to QA validation (which works out of the box without any plugin). Plugins are **disabled by default** — enable only after installing the external tool.
@@ -208,6 +219,8 @@ Commands and skills install to every provider you select. Subagents install to C
 - `board/`: the read-only backlog board over the project's `board` branch (read through one clone per project) — a React/TypeScript app plus a zero-dependency Node server; built by `npm run build:board`, run by `npm run board`. Not carried by the npm package or the main release ZIP
 - `framwork/`: framework payload copied into target projects by the installer
   - `framwork/.codeadd/plugins/`: plugin asset source tree (fragments and skills per plugin)
+- `claude-plugin/`: the Claude Code plugin's own files (SessionStart hook, README); `scripts/build-claude-plugin.js` packages them with the compiled `.claude/` files into `dist/claude-plugin/`, and each stable release publishes that to the `claude-plugin` branch
+- `.claude-plugin/marketplace.json`: the Claude Code marketplace that lists the plugin
 - `workbench/`: internal-layer source for the framework's own commands, skills and agents, with its own build pipeline (compiles to `.claude/`, `.opencode/`, `.agents/` and `.codex/` at the repo root, gitignored)
 - `docs/deliveries/`: durable delivery history — closed-out plan archives
 - `docs/delivered.jsonl`: the delivery index every close-out appends to
@@ -229,6 +242,7 @@ npm ci                              # root tooling (pins the lock)
 npm --prefix cli ci                 # CLI dependencies (vitest)
 node scripts/build.js               # compile product provider files + sidecars
 node scripts/build-workbench.js     # compile this repo's own pipeline
+node scripts/build-claude-plugin.js # package the Claude Code plugin into dist/claude-plugin/
 
 npm test                            # CLI suite (vitest) through scripts/run-tests.js
 npm run test:scripts                # root native script suite (node --test)
