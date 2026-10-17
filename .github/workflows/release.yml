@@ -159,3 +159,35 @@ jobs:
         run: npm publish --tag ${{ steps.release_type.outputs.npm_tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # The Claude Code plugin is served from the `claude-plugin` branch, which
+      # `.claude-plugin/marketplace.json` on main names as the plugin source. It
+      # is build output (dist/ is gitignored on main), so each stable release
+      # commits a fresh snapshot on top of the branch's history. Last, so the
+      # framework release its SessionStart hook installs (`--version v<tag>`)
+      # already exists when the plugin reaches anyone. A beta never moves it.
+      - name: Publish Claude Code plugin
+        if: steps.release_type.outputs.prerelease == 'false'
+        working-directory: .
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          npm --prefix cli ci
+          node scripts/build-claude-plugin.js --out "$RUNNER_TEMP/claude-plugin"
+          DEST="$RUNNER_TEMP/claude-plugin-branch"
+          if git fetch origin claude-plugin:refs/remotes/origin/claude-plugin; then
+            git worktree add -B claude-plugin "$DEST" origin/claude-plugin
+          else
+            git worktree add --orphan -b claude-plugin "$DEST"
+          fi
+          find "$DEST" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -R "$RUNNER_TEMP/claude-plugin/." "$DEST/"
+          cd "$DEST"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Claude Code plugin unchanged for $TAG"
+          else
+            git commit -q -m "chore(claude-plugin): codeadd $TAG"
+            git push origin claude-plugin
+          fi

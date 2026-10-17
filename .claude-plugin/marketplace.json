@@ -1,0 +1,21 @@
+{
+  "name": "code-addiction",
+  "description": "Code Addiction (ADD): AI-powered development workflows for Claude Code.",
+  "owner": {
+    "name": "brabos-ai",
+    "url": "https://github.com/brabos-ai"
+  },
+  "plugins": [
+    {
+      "name": "codeadd",
+      "description": "Discovery, planning, subagent-driven build, review and done, as Claude Code skills and agents. Works in the terminal, on the web, in cloud sessions and in the desktop app.",
+      "source": {
+        "source": "github",
+        "repo": "brabos-ai/code-addiction",
+        "ref": "claude-plugin"
+      },
+      "homepage": "https://code.brabos.ai",
+      "category": "development"
+    }
+  ]
+}
