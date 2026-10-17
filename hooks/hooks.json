@@ -1,0 +1,17 @@
+{
+  "description": "Code Addiction: install the project runtime core (.codeadd/) when it is missing, and tell Claude how plugin names map to the framework's names.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.cjs\"",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  }
+}

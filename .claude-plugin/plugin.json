@@ -1,0 +1,21 @@
+{
+  "name": "codeadd",
+  "displayName": "Code Addiction (ADD)",
+  "version": "1.5.8",
+  "description": "AI-powered development workflows: discovery, planning, subagent-driven build, review and done, as Claude Code commands, skills and agents.",
+  "author": {
+    "name": "brabos-ai",
+    "url": "https://github.com/brabos-ai"
+  },
+  "homepage": "https://code.brabos.ai",
+  "repository": "https://github.com/brabos-ai/code-addiction",
+  "license": "MIT",
+  "keywords": [
+    "codeadd",
+    "code-addiction",
+    "workflow",
+    "planning",
+    "review",
+    "subagents"
+  ]
+}
