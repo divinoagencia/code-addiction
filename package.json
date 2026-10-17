@@ -8,6 +8,7 @@
     "setup": "node scripts/build-workbench.js && npm run build:board",
     "build": "node scripts/build.js",
     "build:workbench": "node scripts/build-workbench.js",
+    "build:claude-plugin": "node scripts/build-claude-plugin.js",
     "build:board": "npm --prefix board ci && npm --prefix board run build",
     "preboard": "node scripts/build-board-runtime.js",
     "board": "node board/server.mjs --layers",
